@@ -2,11 +2,22 @@ const addBtn = document.getElementById("add-btn");
 const todoInput = document.getElementById("todo-input");
 const dateInput = document.getElementById("date-input");
 const todoList = document.getElementById("todo-list");
+const emptyState = document.getElementById("empty-state");
+const filterButtons = document.querySelectorAll(".filter-btn");
 
-let tasks = [];
-let currentFilter = "all"; // simpan filter aktif
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let currentFilter = "all";
 
 addBtn.addEventListener("click", addTask);
+
+filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelector(".filter-btn.active").classList.remove("active");
+        button.classList.add("active");
+        currentFilter = button.dataset.filter;
+        renderTasks();
+    });
+});
 
 function addTask() {
     const text = todoInput.value.trim();
@@ -25,10 +36,11 @@ function addTask() {
     };
 
     tasks.push(task);
+    saveTasks();
+    renderTasks();
+
     todoInput.value = "";
     dateInput.value = "";
-
-    renderTasks();
 }
 
 function renderTasks() {
@@ -40,6 +52,12 @@ function renderTasks() {
         filteredTasks = tasks.filter(task => task.completed);
     } else if (currentFilter === "pending") {
         filteredTasks = tasks.filter(task => !task.completed);
+    }
+
+    if (filteredTasks.length === 0) {
+        emptyState.style.display = "block";
+    } else {
+        emptyState.style.display = "none";
     }
 
     filteredTasks.forEach(task => {
@@ -62,6 +80,7 @@ function renderTasks() {
 
 function deleteTask(id) {
     tasks = tasks.filter(task => task.id !== id);
+    saveTasks();
     renderTasks();
 }
 
@@ -73,10 +92,12 @@ function toggleComplete(id) {
         return task;
     });
 
+    saveTasks();
     renderTasks();
 }
 
-function filterTasks(type) {
-    currentFilter = type;
-    renderTasks();
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
+
+renderTasks();
