@@ -4,6 +4,7 @@ const dateInput = document.getElementById("date-input");
 const todoList = document.getElementById("todo-list");
 
 let tasks = [];
+let currentFilter = "all"; // simpan filter aktif
 
 addBtn.addEventListener("click", addTask);
 
@@ -11,7 +12,6 @@ function addTask() {
     const text = todoInput.value.trim();
     const date = dateInput.value;
 
-    // Validation
     if (text === "" || date === "") {
         alert("Please fill all fields!");
         return;
@@ -19,26 +19,26 @@ function addTask() {
 
     const task = {
         id: Date.now(),
-        text: text,
-        date: date,
+        text,
+        date,
         completed: false
     };
 
     tasks.push(task);
-    renderTasks("all");
-
     todoInput.value = "";
     dateInput.value = "";
+
+    renderTasks();
 }
 
-function renderTasks(filter) {
+function renderTasks() {
     todoList.innerHTML = "";
 
     let filteredTasks = tasks;
 
-    if (filter === "completed") {
+    if (currentFilter === "completed") {
         filteredTasks = tasks.filter(task => task.completed);
-    } else if (filter === "pending") {
+    } else if (currentFilter === "pending") {
         filteredTasks = tasks.filter(task => !task.completed);
     }
 
@@ -51,7 +51,9 @@ function renderTasks(filter) {
             <span onclick="toggleComplete(${task.id})">
                 ${task.text} - ${task.date}
             </span>
-            <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
+            <button class="delete-btn" onclick="deleteTask(${task.id})">
+                Delete
+            </button>
         `;
 
         todoList.appendChild(li);
@@ -60,7 +62,7 @@ function renderTasks(filter) {
 
 function deleteTask(id) {
     tasks = tasks.filter(task => task.id !== id);
-    renderTasks("all");
+    renderTasks();
 }
 
 function toggleComplete(id) {
@@ -70,9 +72,11 @@ function toggleComplete(id) {
         }
         return task;
     });
-    renderTasks("all");
+
+    renderTasks();
 }
 
 function filterTasks(type) {
-    renderTasks(type);
+    currentFilter = type;
+    renderTasks();
 }

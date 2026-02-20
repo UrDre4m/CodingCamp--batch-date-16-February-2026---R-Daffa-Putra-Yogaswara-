@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>To-Do List App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -10,21 +13,46 @@
     <div class="container">
         <h1>My To-Do List</h1>
 
+        <!-- FORM INPUT -->
         <div class="todo-form">
-            <input type="text" id="todo-input" placeholder="Enter your task...">
-            <input type="date" id="date-input">
-            <button id="add-btn">Add Task</button>
+            <input 
+                type="text" 
+                id="todo-input" 
+                placeholder="Enter your task..."
+            >
+
+            <input 
+                type="date" 
+                id="date-input"
+            >
+
+            <button id="add-btn">
+                Add Task
+            </button>
         </div>
 
+        <!-- FILTER BUTTON -->
         <div class="filter">
-            <button onclick="filterTasks('all')">All</button>
-            <button onclick="filterTasks('completed')">Completed</button>
-            <button onclick="filterTasks('pending')">Pending</button>
+            <button onclick="filterTasks('all')">
+                All
+            </button>
+
+            <button onclick="filterTasks('completed')">
+                Completed
+            </button>
+
+            <button onclick="filterTasks('pending')">
+                Pending
+            </button>
         </div>
 
+        <!-- TODO LIST -->
         <ul id="todo-list"></ul>
+
     </div>
 
-<script src="js/script.js"></script>
+    <!-- JAVASCRIPT -->
+    <script src="js/script.js"></script>
+
 </body>
 </html>
